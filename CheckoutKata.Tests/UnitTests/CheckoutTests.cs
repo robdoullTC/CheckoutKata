@@ -32,11 +32,13 @@
 
         [TestMethod]
 
-        //public void OfferForItemBAppliedAtCheckout()
-        //{
-        //    var checkout = new Checkout();
-        //    checkout.Scan("B");
-        //    checkout.Scan("B");
-        //}
+        public void OfferForItemBAppliedAtCheckout()
+        {
+            var checkout = new Checkout();
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            Assert.AreEqual(40, checkout.GetTotalPrice());
+        }
     }
 }

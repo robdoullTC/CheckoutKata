@@ -8,7 +8,8 @@ namespace CheckoutKata
 {
     public class Checkout
     {
-        int total;
+        int total = 0;
+        private List<string> basket = [];
 
         private Dictionary<string, int> prices = new()
         {
@@ -19,17 +20,46 @@ namespace CheckoutKata
         };
 
 
+
+
         public int GetTotalPrice () 
         { 
-            return total; 
+
+            if (basket.Count != 0)
+            {
+                foreach (string item in basket)
+                {
+                    int itemValue = 0;
+
+                    if (prices.TryGetValue(item, out itemValue))
+                    {
+                        total += itemValue;
+                    }
+                }
+            }
+            return total;
         }
 
         public void Scan(string v)
         {
             if (prices.ContainsKey(v))
             {
-                total += prices[v];
+                basket.Add(v);
             }
+        }
+    }
+
+    public class PricingRules
+    {
+        private string _sku;
+        private int _price;
+        private int _quantity;
+
+        public PricingRules (string sku, int price, int quantity)
+        {
+            _sku = sku;
+            _price = price;
+            _quantity = quantity;
         }
     }
 }
