@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CheckoutKata
@@ -19,22 +22,34 @@ namespace CheckoutKata
             {"D", 55}
         };
 
-
-
+        List<PricingRule> pricingRules = new List<PricingRule>
+        {
+            new PricingRule("A", 15, 3, 40)
+        };
 
         public int GetTotalPrice () 
         { 
-
             if (basket.Count != 0)
             {
-                foreach (string item in basket)
+                foreach (var item in basket.GroupBy(x => x))
                 {
                     int itemValue = 0;
 
-                    if (prices.TryGetValue(item, out itemValue))
+                    if (prices.TryGetValue(item.Key, out itemValue))
                     {
-                        total += itemValue;
-                    }
+                        PricingRule ruleA = pricingRules.FirstOrDefault(r => r._sku == "A");
+                        int itemCount = item.Count();
+
+                        if (ruleA != null && itemCount >= ruleA._offerQuantity)
+                        {
+                            total += ruleA._offerPrice;
+                        }
+                        else
+                        {
+                            total += itemValue;
+                        }
+                    } 
+
                 }
             }
             return total;
@@ -49,17 +64,19 @@ namespace CheckoutKata
         }
     }
 
-    public class PricingRules
+    public class PricingRule
     {
-        private string _sku;
-        private int _price;
-        private int _quantity;
+        public string _sku { get; }
+        public int _unitPrice { get; }
+        public int _offerQuantity { get; }
+        public int _offerPrice { get; }
 
-        public PricingRules (string sku, int price, int quantity)
+        public PricingRule (string sku, int unitPrice, int offerQuantity, int offerPrice)
         {
             _sku = sku;
-            _price = price;
-            _quantity = quantity;
+            _unitPrice = unitPrice;
+            _offerQuantity = offerQuantity;
+            _offerPrice = offerPrice;
         }
     }
 }
