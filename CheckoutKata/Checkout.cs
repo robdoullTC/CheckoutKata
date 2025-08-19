@@ -24,32 +24,38 @@ namespace CheckoutKata
 
         List<PricingRule> pricingRules = new List<PricingRule>
         {
-            new PricingRule("A", 15, 3, 40)
+            new PricingRule("B", 15, 3, 40)
         };
 
         public int GetTotalPrice () 
         { 
             if (basket.Count != 0)
             {
-                foreach (var item in basket.GroupBy(x => x))
+                var groupedItems = basket.GroupBy(x => x);
+
+                foreach (var item in groupedItems)
                 {
                     int itemValue = 0;
+                    int itemCount = item.Count();
 
                     if (prices.TryGetValue(item.Key, out itemValue))
                     {
-                        PricingRule ruleA = pricingRules.FirstOrDefault(r => r._sku == "A");
-                        int itemCount = item.Count();
+                        PricingRule ruleB = pricingRules.FirstOrDefault(r => r._sku == "B");
 
-                        if (ruleA != null && itemCount >= ruleA._offerQuantity)
+                        while (itemCount > 0)
                         {
-                            total += ruleA._offerPrice;
-                        }
-                        else
-                        {
-                            total += itemValue;
+                            if (ruleB != null && itemCount >= ruleB._offerQuantity)
+                            {
+                                total += ruleB._offerPrice;
+                                itemCount -= ruleB._offerQuantity;
+                            }
+                            else
+                            {
+                                total += itemValue;
+                                itemCount--;
+                            }
                         }
                     } 
-
                 }
             }
             return total;

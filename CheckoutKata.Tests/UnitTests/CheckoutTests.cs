@@ -40,5 +40,20 @@
             checkout.Scan("B");
             Assert.AreEqual(40, checkout.GetTotalPrice());
         }
+
+        [TestMethod]
+
+        public void CheckItemBOfferAppliedToFive()
+        {
+            var checkout = new Checkout();
+
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+
+            Assert.AreEqual(70, checkout.GetTotalPrice());
+        }
     }
 }
