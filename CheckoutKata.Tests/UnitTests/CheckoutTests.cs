@@ -31,7 +31,6 @@
         }
 
         [TestMethod]
-
         public void OfferForItemBAppliedAtCheckout()
         {
             var checkout = new Checkout();
@@ -42,7 +41,6 @@
         }
 
         [TestMethod]
-
         public void CheckItemBOfferAppliedToFive()
         {
             var checkout = new Checkout();
@@ -54,6 +52,44 @@
             checkout.Scan("B");
 
             Assert.AreEqual(70, checkout.GetTotalPrice());
+        }
+
+        [TestMethod]
+        public void CheckItemDOfferAppliedAtCheckout()
+        {
+            var checkout = new Checkout();
+            checkout.Scan("D");
+            checkout.Scan("D");
+
+            Assert.AreEqual(82.5, checkout.GetTotalPrice());
+        }
+
+        [TestMethod]
+        public void CheckFiveOfEach()
+        {
+            var checkout = new Checkout();
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("A");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("B");
+            checkout.Scan("C");
+            checkout.Scan("C");
+            checkout.Scan("C");
+            checkout.Scan("C");
+            checkout.Scan("C");
+            checkout.Scan("D");
+            checkout.Scan("D");
+            checkout.Scan("D");
+            checkout.Scan("D");
+            checkout.Scan("D");
+
+            Assert.AreEqual(540, checkout.GetTotalPrice());
         }
     }
 }

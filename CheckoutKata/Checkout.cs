@@ -11,7 +11,7 @@ namespace CheckoutKata
 {
     public class Checkout
     {
-        int total = 0;
+        double total = 0;
         private List<string> basket = [];
 
         private Dictionary<string, int> prices = new()
@@ -24,10 +24,11 @@ namespace CheckoutKata
 
         List<PricingRule> pricingRules = new List<PricingRule>
         {
-            new PricingRule("B", 15, 3, 40)
+            new PricingRule("B", 15, 3, 40),
+            new PricingRule("D", 55, 2, 82.5)
         };
 
-        public int GetTotalPrice () 
+        public double GetTotalPrice () 
         { 
             if (basket.Count != 0)
             {
@@ -40,14 +41,14 @@ namespace CheckoutKata
 
                     if (prices.TryGetValue(item.Key, out itemValue))
                     {
-                        PricingRule ruleB = pricingRules.FirstOrDefault(r => r._sku == "B");
+                        PricingRule rule = pricingRules.FirstOrDefault(r => r._sku == item.Key);
 
                         while (itemCount > 0)
                         {
-                            if (ruleB != null && itemCount >= ruleB._offerQuantity)
+                            if (rule != null && itemCount >= rule._offerQuantity)
                             {
-                                total += ruleB._offerPrice;
-                                itemCount -= ruleB._offerQuantity;
+                                total += rule._offerPrice;
+                                itemCount -= rule._offerQuantity;
                             }
                             else
                             {
@@ -75,9 +76,9 @@ namespace CheckoutKata
         public string _sku { get; }
         public int _unitPrice { get; }
         public int _offerQuantity { get; }
-        public int _offerPrice { get; }
+        public double _offerPrice { get; }
 
-        public PricingRule (string sku, int unitPrice, int offerQuantity, int offerPrice)
+        public PricingRule (string sku, int unitPrice, int offerQuantity, double offerPrice)
         {
             _sku = sku;
             _unitPrice = unitPrice;
